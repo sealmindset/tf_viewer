@@ -1,1 +1,3 @@
 .env
+**/.terraform/**
+tests/output/terraform_validate/.terraform/providers/registry.terraform.io/hashicorp/google/6.46.0/darwin_arm64/terraform-provider-google_v6.46.0_x5*
