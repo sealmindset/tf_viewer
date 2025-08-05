@@ -1,0 +1,20 @@
+{
+  "nodes": [
+    {
+      "id": "test_resource_1754342714976",
+      "name": "test_bucket",
+      "type": "resource",
+      "resourceType": "google_storage_bucket",
+      "x": 500,
+      "y": 200,
+      "config": {
+        "name": "test-bucket",
+        "location": "US",
+        "force_destroy": true
+      }
+    }
+  ],
+  "edges": [],
+  "width": null,
+  "height": null
+}

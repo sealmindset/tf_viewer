@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terraform Diagram Viewer</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/diagram.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo">
+        <i class="fas fa-project-diagram"></i>
+        <h1>Terraform Diagram Viewer</h1>
+      </div>
+      <div class="header-actions">
+        <button id="open-file" class="btn btn-primary">
+          <i class="fas fa-folder-open"></i> Open Project
+        </button>
+        <button id="save-file" class="btn btn-success">
+          <i class="fas fa-save"></i> Save
+        </button>
+        <button id="export-code" class="btn btn-secondary">
+          <i class="fas fa-file-export"></i> Export Code
+        </button>
+        <button id="settings" class="btn btn-icon">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <div class="sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-header">
+            <h3>Resources</h3>
+            <button id="add-resource" class="btn btn-icon">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div class="search-box">
+            <input type="text" id="resource-search" placeholder="Search resources...">
+            <i class="fas fa-search"></i>
+          </div>
+          <div id="resource-list" class="resource-list">
+            <!-- Resources will be dynamically added here -->
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-header">
+            <h3>Properties</h3>
+          </div>
+          <div id="properties-panel" class="properties-panel">
+            <div class="no-selection">
+              <p>Select a resource to edit its properties</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="diagram-container">
+        <div class="diagram-toolbar">
+          <div class="diagram-tools">
+  <button id="enhance-diagram" class="btn btn-tool" title="Enhance Diagram with ChatGPT">
+    <i class="fas fa-magic"></i> Enhance
+  </button>
+            <button id="tool-pan" class="btn btn-tool" title="Pan Tool">
+              <i class="fas fa-hand-paper"></i>
+            </button>
+            <button id="tool-select" class="btn btn-tool active" title="Select Tool">
+              <i class="fas fa-mouse-pointer"></i>
+            </button>
+            <button id="tool-connect" class="btn btn-tool" title="Connect Tool">
+              <i class="fas fa-link"></i>
+            </button>
+            <div class="tool-separator"></div>
+            <button id="zoom-in" class="btn btn-tool" title="Zoom In">
+              <i class="fas fa-search-plus"></i>
+            </button>
+            <button id="zoom-out" class="btn btn-tool" title="Zoom Out">
+              <i class="fas fa-search-minus"></i>
+            </button>
+            <button id="zoom-fit" class="btn btn-tool" title="Center Diagram">
+              <i class="fas fa-crosshairs"></i>
+            </button>
+          </div>
+
+          <div class="diagram-layout">
+            <label>Layout:</label>
+            <select id="layout-direction">
+              <option value="LR">Left to Right</option>
+              <option value="TB">Top to Bottom</option>
+              <option value="RL">Right to Left</option>
+              <option value="BT">Bottom to Top</option>
+            </select>
+            <button id="apply-layout" class="btn btn-secondary">Apply</button>
+          </div>
+        </div>
+
+        <div id="diagram-canvas" class="diagram-canvas diagram-scrollable">
+          <!-- The diagram will be rendered here -->
+          <svg id="diagram-svg" width="4000" height="3000">
+            <g id="diagram-edges"></g>
+            <g id="diagram-nodes"></g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="code-panel">
+        <div class="code-tabs">
+          <div class="code-tab active" data-tab="terraform-code">Terraform Code</div>
+          <div class="code-tab" data-tab="json-view">JSON</div>
+        </div>
+        <div class="code-content">
+          <div id="terraform-code" class="code-view active">
+            <pre id="code-editor"></pre>
+          </div>
+          <div id="json-view" class="code-view">
+            <pre id="json-editor"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div id="project-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Open Terraform Project</h2>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="project-path">Project Path</label>
+          <input type="text" id="project-path" placeholder="Enter path to your Terraform project">
+          <button id="browse-project" class="btn btn-secondary">Browse</button>
+        </div>
+        <div class="recent-projects">
+          <h3>Recent Projects</h3>
+          <ul id="recent-projects-list">
+            <!-- Recent projects will be dynamically added here -->
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="open-project-btn" class="btn btn-primary">Open</button>
+        <button id="cancel-project-btn" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="add-resource-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add Resource</h2>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="resource-type">Resource Type</label>
+          <select id="resource-type">
+            <option value="aws_instance">aws_instance</option>
+            <option value="aws_s3_bucket">aws_s3_bucket</option>
+            <option value="google_compute_instance">google_compute_instance</option>
+            <option value="google_storage_bucket">google_storage_bucket</option>
+            <option value="azurerm_virtual_machine">azurerm_virtual_machine</option>
+            <option value="azurerm_storage_account">azurerm_storage_account</option>
+            <!-- More resource types will be dynamically loaded -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="resource-name">Resource Name</label>
+          <input type="text" id="resource-name" placeholder="Enter resource name">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="add-resource-btn" class="btn btn-primary">Add</button>
+        <button id="cancel-resource-btn" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="export-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Export Terraform Code</h2>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="export-path">Export Path</label>
+          <input type="text" id="export-path" placeholder="Enter path to export code">
+          <button id="browse-export" class="btn btn-secondary">Browse</button>
+        </div>
+        <div class="export-options">
+          <h3>Export Options</h3>
+          <div class="checkbox-group">
+            <input type="checkbox" id="overwrite-files" checked>
+            <label for="overwrite-files">Overwrite existing files</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="create-backup" checked>
+            <label for="create-backup">Create backup of existing files</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="export-btn" class="btn btn-primary">Export</button>
+        <button id="cancel-export-btn" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <!-- Load core modules first -->
+  <script src="js/diagramRenderer.js"></script>
+  <script src="js/diagram.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

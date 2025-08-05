@@ -1,0 +1,349 @@
+/* Diagram Specific Styles */
+
+/* Resource Node Types */
+.node {
+  cursor: pointer;
+  transition: transform 0.1s, filter 0.2s;
+}
+
+.node:hover {
+  filter: brightness(1.05);
+}
+
+.node.selected {
+  filter: drop-shadow(0 0 5px rgba(92, 107, 192, 0.8));
+}
+
+.node.dragging {
+  cursor: grabbing;
+  filter: brightness(1.05) drop-shadow(0 0 8px rgba(92, 107, 192, 0.6));
+}
+
+.node .body {
+  fill: #FFF;
+  stroke: #CFD8DC;
+  stroke-width: 2;
+  rx: 6;
+  ry: 6;
+}
+
+.node .header {
+  fill: #ECEFF1;
+  rx: 6;
+  ry: 6;
+}
+
+.node .title {
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  fill: #263238;
+}
+
+.node .subtitle {
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  font-size: 12px;
+  fill: #607D8B;
+}
+
+.node .port {
+  fill: #90A4AE;
+  stroke: #ECEFF1;
+  stroke-width: 2;
+  cursor: pointer;
+  transition: fill 0.2s;
+}
+
+.node .port:hover {
+  fill: #5C6BC0;
+}
+
+.node .port.active {
+  fill: #3949AB;
+}
+
+/* Resource Type Colors */
+.node.resource-aws .header {
+  fill: #FF9900;
+  fill-opacity: 0.2;
+}
+
+.node.resource-aws .body {
+  stroke: #FF9900;
+}
+
+.node.resource-gcp .header {
+  fill: #4285F4;
+  fill-opacity: 0.2;
+}
+
+.node.resource-gcp .body {
+  stroke: #4285F4;
+}
+
+.node.resource-azure .header {
+  fill: #0078D4;
+  fill-opacity: 0.2;
+}
+
+.node.resource-azure .body {
+  stroke: #0078D4;
+}
+
+.node.resource-module .header {
+  fill: #8E24AA;
+  fill-opacity: 0.2;
+}
+
+.node.resource-module .body {
+  stroke: #8E24AA;
+}
+
+.node.resource-variable .header {
+  fill: #00ACC1;
+  fill-opacity: 0.2;
+}
+
+.node.resource-variable .body {
+  stroke: #00ACC1;
+}
+
+.node.resource-data .header {
+  fill: #43A047;
+  fill-opacity: 0.2;
+}
+
+.node.resource-data .body {
+  stroke: #43A047;
+}
+
+.node.resource-output .header {
+  fill: #FB8C00;
+  fill-opacity: 0.2;
+}
+
+.node.resource-output .body {
+  stroke: #FB8C00;
+}
+
+/* Edge/Connection Styles */
+.edge {
+  stroke: #90A4AE;
+  stroke-width: 2;
+  cursor: pointer;
+  stroke-linecap: round;
+  fill: none;
+  transition: stroke-width 0.2s, stroke 0.2s;
+}
+
+.edge:hover {
+  stroke-width: 3px;
+  stroke: #5C6BC0;
+}
+
+.edge.selected {
+  stroke-width: 4px;
+  stroke: #3F51B5;
+  filter: drop-shadow(0 0 3px rgba(63, 81, 181, 0.6));
+}
+
+.edge-label-group {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.edge-label-group:hover {
+  opacity: 0.8;
+}
+
+.edge.selected {
+  stroke: #3949AB;
+  stroke-width: 3;
+}
+
+.edge-marker {
+  fill: #90A4AE;
+}
+
+.edge:hover .edge-marker {
+  fill: #5C6BC0;
+}
+
+.edge.selected .edge-marker {
+  fill: #3949AB;
+}
+
+.edge-label {
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  font-size: 12px;
+  fill: #607D8B;
+  pointer-events: none;
+  user-select: none;
+}
+
+.edge-background {
+  fill: white;
+  fill-opacity: 0.8;
+}
+
+/* Connection Types */
+.edge.depends-on {
+  stroke-dasharray: 4 2;
+}
+
+.edge.reference {
+  stroke-dasharray: none;
+}
+
+/* Temporary Edge for Drawing */
+.temp-edge {
+  stroke: #5C6BC0;
+  stroke-width: 2;
+  stroke-dasharray: 4 2;
+  pointer-events: none;
+}
+
+/* Canvas Interaction */
+.canvas-drag-area {
+  cursor: grab;
+}
+
+.canvas-drag-area.dragging {
+  cursor: grabbing;
+}
+
+/* Context Menu */
+.context-menu {
+  position: fixed;
+  z-index: 1000;
+  width: 180px;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.context-menu-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.context-menu-item:hover {
+  background-color: #F5F7FA;
+}
+
+.context-menu-item i {
+  margin-right: 8px;
+  color: #607D8B;
+  width: 16px;
+  text-align: center;
+}
+
+.context-menu-separator {
+  height: 1px;
+  background-color: #ECEFF1;
+  margin: 4px 0;
+}
+
+/* Mini-map */
+.mini-map {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 200px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid #CFD8DC;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 5;
+}
+
+.mini-map-viewport {
+  position: absolute;
+  border: 2px solid #5C6BC0;
+  background-color: rgba(92, 107, 192, 0.1);
+  cursor: move;
+}
+
+/* Tooltips */
+.tooltip {
+  position: absolute;
+  z-index: 1000;
+  background-color: rgba(38, 50, 56, 0.9);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  max-width: 250px;
+  white-space: normal;
+  word-wrap: break-word;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Zoom Controls */
+.zoom-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.zoom-control {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  background-color: white;
+  color: #607D8B;
+}
+
+.zoom-control:hover {
+  background-color: #F5F7FA;
+  color: #263238;
+}
+
+.zoom-separator {
+  height: 1px;
+  background-color: #ECEFF1;
+}
+
+/* Diagram Loading State */
+.diagram-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid #ECEFF1;
+  border-top-color: #5C6BC0;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
